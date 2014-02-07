@@ -734,7 +734,7 @@ describe Unit do
     specify { Unit('1 ml').to_s.should eq('1 mL') }
     specify { Unit('1 milliliter').to_s.should eq('1 mL') }
     specify { Unit('1 Ml').to_s.should eq('1 ML') }
-    specify { Unit('1 megalitre').to_s.should eq('1 L') }
+    specify { Unit('1 megalitre').to_s.should eq('1 ML') }
   end
   
   describe '#undefine!' do
