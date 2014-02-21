@@ -600,9 +600,11 @@ describe Unit do
     end
   end
   
+  if RUBY_VERSION < "1.9"
   describe '#to_yaml' do
     subject { Unit('1 mm') }
     its(:to_yaml) {should =~ /--- !ruby\/object:Unit/ }
+  end
   end
 
   describe "#definition" do    
