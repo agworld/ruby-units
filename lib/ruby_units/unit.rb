@@ -277,7 +277,7 @@ class Unit < Numeric
     # @param [Hash] opts
     # @return [String]
     def to_yaml( opts = {} )
-      YAML::quick_emit( object_id, opts ) do |out|
+      ::YAML::quick_emit( object_id, opts ) do |out|
         out.map( taguri, to_yaml_style ) do |map|
           for m in to_yaml_properties do
             map.add( m[1..-1], instance_variable_get( m ) )
