@@ -1582,6 +1582,17 @@ describe 'Unit Comparisons' do
     end
 
     specify { expect(RubyUnits::Unit.new('1 m')).not_to be_nil }
+
+    context 'when creating two identical Units with whole-number float values' do
+      it 'creates both with integer scalar values' do
+        RubyUnits::Unit.clear_cache
+        scalar1 = RubyUnits::Unit.new(81.0, 'lbs/acre').scalar
+        scalar2 = RubyUnits::Unit.new(81.0, 'lbs/acre').scalar
+
+        expect(scalar1.class).to eq(scalar2.class)
+        expect(scalar1).to be_kind_of(Integer)
+      end
+    end
   end
 
   context 'Comparisons' do
@@ -1701,6 +1712,44 @@ describe 'Unit Conversions' do
       specify { expect(RubyUnits::Unit.new(stone).convert_to('lbs')).to eq(RubyUnits::Unit.new(pounds)) }
     end
     specify { expect(RubyUnits::Unit.new('200 lbs').to_s(:stone)).to eq '14 stone, 4 lb' }
+  end
+
+  context 'when converting Units to the same units' do
+    context 'when the unit type is not already in the unit cache' do
+      before { RubyUnits::Unit.clear_cache }
+
+      context "an integer as the source value's scalar" do
+        it 'is converted to a rational scalar' do
+          converted_unit = RubyUnits::Unit.new(81, 'lbs/acre').convert_to('lbs/acre')
+          expect(converted_unit.scalar).to be_kind_of(Rational)
+        end
+      end
+
+      context "a whole-number float as the source value's scalar" do
+        it 'is converted to a rational scalar' do
+          converted_unit = RubyUnits::Unit.new(81.0, 'lbs/acre').convert_to('lbs/acre')
+          expect(converted_unit.scalar).to be_kind_of(Rational)
+        end
+      end
+    end
+
+    context 'when the unit type is already in the unit cache' do
+      before { RubyUnits::Unit.new(80, 'lbs/acre') }
+
+      context "an integer as the source value's scalar" do
+        it 'is converted to a rational scalar' do
+          converted_unit = RubyUnits::Unit.new(81, 'lbs/acre').convert_to('lbs/acre')
+          expect(converted_unit.scalar).to be_kind_of(Rational)
+        end
+      end
+
+      context "a whole-number float as the source value's scalar" do
+        it 'is converted to a rational scalar' do
+          converted_unit = RubyUnits::Unit.new(81.0, 'lbs/acre').convert_to('lbs/acre')
+          expect(converted_unit.scalar).to be_kind_of(Rational)
+        end
+      end
+    end
   end
 end
 
