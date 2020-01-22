@@ -14,7 +14,7 @@ end
 describe "Github issue #48" do
   it "should not leak mathn" do
     if ENV['WITHOUT_MATHN']
-      (30/20).should be_kind_of Fixnum
+      (30/20).should be_kind_of Integer
     end
   end
 end

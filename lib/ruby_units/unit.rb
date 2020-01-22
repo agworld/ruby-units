@@ -480,14 +480,14 @@ class Unit < Numeric
     end
     for unit in @denominator.compact do
       if @@PREFIX_VALUES[unit]
-        if q.kind_of?(Fixnum)
+        if q.kind_of?(Integer)
           q = q.quo(@@PREFIX_VALUES[unit])
         else
           q /= @@PREFIX_VALUES[unit]
         end
       else
         if @@UNIT_VALUES[unit]
-          if q.kind_of?(Fixnum)
+          if q.kind_of?(Integer)
             q = q.quo(@@UNIT_VALUES[unit][:scalar])
           else
             q /= @@UNIT_VALUES[unit][:scalar]
@@ -722,7 +722,7 @@ class Unit < Numeric
             Unit.new(:scalar => (other.scalar + self.convert_to(other.temperature_scale).scalar), :numerator => other.numerator, :denominator=>other.denominator, :signature => other.signature)
           end
         else
-          if @@cached_units[self.units].scalar.kind_of?(Fixnum)
+          if @@cached_units[self.units].scalar.kind_of?(Integer)
             @q ||= ((@@cached_units[self.units].scalar.quo(@@cached_units[self.units].base_scalar)) rescue (self.units.unit.to_base.scalar))
           else
             @q ||= ((@@cached_units[self.units].scalar / @@cached_units[self.units].base_scalar) rescue (self.units.unit.to_base.scalar))
@@ -765,7 +765,7 @@ class Unit < Numeric
             when other.is_temperature?
               raise ArgumentError, "Cannot subtract a temperature from a differential degree unit"
             else
-              if @@cached_units[self.units].scalar.kind_of?(Fixnum)
+              if @@cached_units[self.units].scalar.kind_of?(Integer)
                 @q ||= ((@@cached_units[self.units].scalar.quo(@@cached_units[self.units].base_scalar)) rescue (self.units.unit.scalar.quo(self.units.unit.to_base.scalar)))
               else
                 @q ||= ((@@cached_units[self.units].scalar / @@cached_units[self.units].base_scalar) rescue (self.units.unit.scalar/self.units.unit.to_base.scalar))
@@ -813,7 +813,7 @@ class Unit < Numeric
     when Unit
       raise ZeroDivisionError if other.zero?
       raise ArgumentError, "Cannot divide with temperatures" if [other,self].any? {|x| x.is_temperature?}
-      opts = if @scalar.kind_of?(Fixnum)
+      opts = if @scalar.kind_of?(Integer)
         Unit.eliminate_terms(@scalar.quo(other.scalar), @numerator + other.denominator ,@denominator + other.numerator)
       else
         Unit.eliminate_terms(@scalar/other.scalar, @numerator + other.denominator ,@denominator + other.numerator)
@@ -822,7 +822,7 @@ class Unit < Numeric
       return Unit.new(opts)
     when Numeric
       raise ZeroDivisionError if other.zero?
-      if @scalar.kind_of?(Fixnum)
+      if @scalar.kind_of?(Integer)
         return Unit.new(:scalar=>@scalar.quo(other), :numerator=>@numerator, :denominator=>@denominator, :signature => @signature)
       else
         return Unit.new(:scalar=>@scalar/other, :numerator=>@numerator, :denominator=>@denominator, :signature => @signature)
@@ -1019,7 +1019,7 @@ class Unit < Numeric
 
       _product1 = ( (_numerator1 + _denominator2).inject(1) {|product,n| product*n} )
       _product2 = ( (_numerator2 + _denominator1).inject(1) {|product,n| product*n} )
-      if _product1.kind_of?(Fixnum)
+      if _product1.kind_of?(Integer)
         q = @scalar * _product1.quo(_product2)
       else
         q = @scalar * _product1 / _product2
