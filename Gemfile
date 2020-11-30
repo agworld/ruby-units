@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 group :development do
+  gem 'pry', '0.12.2' # Pry fails with error on load with version 0.13.1 - `NameError: uninitialized constant Pry::Command::ExitAll`
   gem 'pry-byebug', platform: :mri
   gem 'ruby-maven', platform: :jruby
   gem 'ruby-prof', platform: :mri

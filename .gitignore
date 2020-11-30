@@ -9,6 +9,7 @@
 /bin/
 # rspec failure tracking
 .rspec_status
+.byebug_history
 
 # don't check in Gemfile.lock for a gem
 Gemfile.lock
